@@ -33,4 +33,4 @@ class_dict = {
 # call u.view_with_class(train_loader, class_dict) here
 
 model = YOLO('yolov8n.yaml')
-results = model.train(data="skincancer.yaml", epochs=30, imgsz=512, batch=10)
+results = model.train(data="cervicalcancer.yaml", epochs=30, imgsz=512, batch=10)
