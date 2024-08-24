@@ -8,6 +8,7 @@ from torchvision import transforms
 from numpy.random import seed
 import numpy as np
 import shutil
+from glob import glob
 
 
 def train_df(tr_path):
@@ -88,7 +89,7 @@ def view_with_class(train_loader, class_dict):
     plt.show()
 
 
-def create_dirs(dir):
+def create_dirs_sk(dir):
     tr_dr = os.path.join(dir, 'Training')
     os.mkdir(tr_dr)
     ts_dr = os.path.join(dir, 'Testing')
@@ -210,9 +211,8 @@ def print_size(dir):
     print(len(os.listdir(akiec)))
 
 
-def augment_data(dir):
+def augment_data(dir, class_list, n, crop=224, enable=False):
     tr_dr = os.path.join(dir, 'Training')
-    class_list = ['mel', 'bcc', 'akiec']
 
     for img_class in class_list:
         # Temporary directory to hold images before augmentation
@@ -233,18 +233,27 @@ def augment_data(dir):
                 transforms.RandomRotation(180),
                 transforms.RandomHorizontalFlip(),
                 transforms.RandomVerticalFlip(),
-                transforms.RandomResizedCrop(224, scale=(0.9, 1.1)),
+                transforms.RandomResizedCrop(crop, scale=(0.9, 1.1)),
                 transforms.RandomAffine(degrees=0, translate=(0.1, 0.1)),
                 transforms.ToTensor(),
             ]
         )
 
-        # Custom dataset with transforms
-        dataset = CustomDataset(img_dir, transform=transform)
+        if enable:
+            # Create a DataFrame for CustomDataset
+            img_paths = [os.path.join(img_dir, fname) for fname in os.listdir(img_dir)]
+            labels = [img_class] * len(img_paths)
+            df = pd.DataFrame({'img_path': img_paths, 'label': labels})
+
+            # Custom dataset with transforms
+            dataset = CustomDataset(dataframe=df, transform=transform)
+            # Custom dataset with transforms
+        else:
+            dataset = CustomDataset(img_dir, transform=transform)
         dataloader = DataLoader(dataset, batch_size=50, shuffle=True)
 
         # Calculate number of augmented images to generate
-        num_aug_images_wanted = 950
+        num_aug_images_wanted = n
         num_files = len(os.listdir(img_dir))
         num_batches = int((num_aug_images_wanted - num_files) / 50)
 
@@ -254,10 +263,80 @@ def augment_data(dir):
         for i, batch in enumerate(dataloader):
             if i >= num_batches:
                 break
-            for j, img in enumerate(batch):
+            for j, img in enumerate(batch[0]):
                 # Convert tensor to PIL image for saving
                 img_pil = transforms.ToPILImage()(img)
                 img_pil.save(os.path.join(save_path, f"aug_{i}_{j}.jpg"))
 
         # Clean up temporary directory
         shutil.rmtree(aug_dir)
+
+
+def organize_data(root, output_dir, split=[0.8, 0.2]):
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Create subdirectories
+    for sub_dir in ['Training', 'Testing']:
+        os.makedirs(os.path.join(output_dir, sub_dir), exist_ok=True)
+        for class_name in sorted(
+            [
+                'High squamous intra-epithelial lesion',
+                'Low squamous intra-epithelial lesion',
+                'Negative for Intraepithelial malignancy',
+                'Squamous cell carcinoma',
+            ]
+        ):
+            os.makedirs(os.path.join(output_dir, sub_dir, class_name), exist_ok=True)
+
+    # Get all image paths and labels
+    image_paths = sorted(glob(f"{root}/*/*.jpg"))
+    labels = [os.path.basename(os.path.dirname(p)) for p in image_paths]
+
+    # Create a dataframe
+    df = pd.DataFrame({'img_path': image_paths, 'label': labels})
+
+    # Shuffle the dataframe using numpy
+    indices = np.arange(len(df))
+    np.random.shuffle(indices)
+    df = df.iloc[indices].reset_index(drop=True)
+
+    # Calculate splits
+    total_len = len(df)
+    tr_len = int(total_len * split[0])
+    ts_len = total_len - tr_len
+
+    # Split dataframe
+    df_train = df[:tr_len]
+    df_test = df[tr_len:]
+
+    # Move images
+    for _, row in df_train.iterrows():
+        im_path = row['img_path']
+        class_name = row['label']
+        shutil.copy(
+            im_path,
+            os.path.join(output_dir, 'Training', class_name, os.path.basename(im_path)),
+        )
+
+    for _, row in df_test.iterrows():
+        im_path = row['img_path']
+        class_name = row['label']
+        shutil.copy(
+            im_path,
+            os.path.join(output_dir, 'Testing', class_name, os.path.basename(im_path)),
+        )
+
+
+def print_size_cc(dir):
+    tr_dr = os.path.join(dir, 'Training')
+    ts_dr = os.path.join(dir, 'Testing')
+    a1 = []
+    a2 = []
+    for i in os.listdir(tr_dr):
+        j = os.path.join(tr_dr, i)
+        a1.append(len(os.listdir(j)))
+    for i in os.listdir(ts_dr):
+        j = os.path.join(ts_dr, i)
+        a2.append(len(os.listdir(j)))
+    print(f"Training: {a1}")
+    print(f"Testing: {a2}")

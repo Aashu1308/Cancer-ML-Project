@@ -7,7 +7,8 @@ dir = 'Data/SkinLesion'
 
 # call u.create_dirs(dir) here
 # call u.filter_data(dir) here
-# call u.augment_data(dir) here
+# class_list = ['mel', 'bcc', 'akiec']
+# call u.augment_data(dir,class_list,n=950) here
 
 tr_df = u.train_df('Data/SkinLesion/Training')
 ts_df = u.train_df('Data/SkinLesion/Testing')
