@@ -3,3 +3,4 @@ Data/*
 .DS_Store
 installed.txt
 missing.txt
+Models/__pycache__/

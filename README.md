@@ -4,9 +4,9 @@
 
 ### Download these inside Data Folder
 
-- [Brain Tumor MRI Dataset - BrainTumor](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
-- [Mendeley LBC Cervical Cancer - CervicalCancer](https://www.kaggle.com/datasets/blank1508/mendeley-lbc-cervical-cancer)
-- [Skin Cancer MNIST: HAM10000 - SkinLesion](https://www.kaggle.com/datasets/kmader/skin-cancer-mnist-ham10000)
+- [Brain Tumor MRI Dataset - save as BrainTumor](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
+- [Mendeley LBC Cervical Cancer - save as CervicalCancer](https://www.kaggle.com/datasets/blank1508/mendeley-lbc-cervical-cancer)
+- [Skin Cancer MNIST: HAM10000 - save as SkinLesion](https://www.kaggle.com/datasets/kmader/skin-cancer-mnist-ham10000)
 
 ## Steps:
 
@@ -17,6 +17,7 @@
 2. ```sh
    make
    ```
+   If `make` doesnt work, run `choco install make` and then try again
 3. ```sh
    conda activate cancerML
    ```

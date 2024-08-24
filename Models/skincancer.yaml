@@ -1,0 +1,8 @@
+path: ../Data/SkinLesion
+train: Training
+val: Testing
+
+names:
+  0: akiec
+  1: bcc
+  2: mel
