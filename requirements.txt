@@ -1,0 +1,8 @@
+numpy
+ultralytics
+pandas
+matplotlib
+seaborn
+pillow
+torch
+torchvision

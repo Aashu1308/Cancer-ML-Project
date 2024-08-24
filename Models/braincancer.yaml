@@ -1,0 +1,8 @@
+path: ../Data/BrainTumor
+train: Training
+val: Testing
+
+names:
+  0: notumor
+  1: glioma
+  2: meningioma
