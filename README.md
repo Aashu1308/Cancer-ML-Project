@@ -31,5 +31,5 @@ If `make` doesnt work, run `choco install make` and then try again
    conda activate cancerML
 ```
 
-4. Train the respective models - You may need to reset the settings.yaml for ultralytics to modify pathing
+4. Use the pretrained best.pt models from Models/model/respective-cancer directories or train your own models
 5. `cd Models` and then `streamlit run web.py`
