@@ -10,15 +10,26 @@
 
 ## Steps:
 
-1. ```sh
-   git clone https://github.com/Aashu1308/Cancer-ML-Project
-   cd Cancer-ML-Project
-   ```
-2. ```sh
+1. Clone the project or copy source code
+
+```sh
+  git clone https://github.com/Aashu1308/Cancer-ML-Project
+  cd Cancer-ML-Project
+```
+
+2. Run make file to setup environment
+
+```sh
    make
-   ```
-   If `make` doesnt work, run `choco install make` and then try again
-3. ```sh
+```
+
+If `make` doesnt work, run `choco install make` and then try again
+
+3. Enter the conda environment
+
+```sh
    conda activate cancerML
-   ```
-4. Train the respective models
+```
+
+4. Train the respective models - You may need to reset the settings.yaml for ultralytics to modify pathing
+5. `cd Models` and then `streamlit run web.py`
