@@ -1,4 +1,4 @@
-path: ../Data/BrainTumor
+path: Data/BrainTumor
 train: Training
 val: Testing
 

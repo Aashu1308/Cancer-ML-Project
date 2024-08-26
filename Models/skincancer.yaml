@@ -1,4 +1,4 @@
-path: ../Data/SkinLesion
+path: Data/SkinLesion
 train: Training
 val: Testing
 

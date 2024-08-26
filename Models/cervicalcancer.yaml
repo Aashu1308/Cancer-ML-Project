@@ -1,4 +1,4 @@
-path: ../Data/CervicalCancer
+path: Data/CervicalCancer
 train: Training
 val: Testing
 

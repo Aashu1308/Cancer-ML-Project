@@ -340,3 +340,22 @@ def print_size_cc(dir):
         a2.append(len(os.listdir(j)))
     print(f"Training: {a1}")
     print(f"Testing: {a2}")
+
+
+def create_yolo_labels(image_dir, label_dir, cid):
+    if not os.path.exists(label_dir):
+        os.makedirs(label_dir)
+
+    image_paths = glob(os.path.join(image_dir, "*.jpg"))
+
+    for img_path in image_paths:
+        label_path = os.path.join(
+            label_dir, os.path.basename(img_path).replace(".jpg", ".txt")
+        )
+        with open(label_path, 'w') as f:
+            class_id = cid
+            center_x = 0.5
+            center_y = 0.5
+            obj_width = 1
+            obj_height = 1
+            f.write(f"{class_id} {center_x} {center_y} {obj_width} {obj_height}")

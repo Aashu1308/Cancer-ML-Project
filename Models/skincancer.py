@@ -1,28 +1,42 @@
 from ultralytics import YOLO
-from torch.utils.data import DataLoader
-from torchvision import transforms
-import utils as u
 
-dir = 'Data/SkinLesion'
+# from torch.utils.data import DataLoader
+# from torchvision import transforms
+# import utils as u
 
-# call u.create_dirs(dir) here
-# call u.filter_data(dir) here
-# class_list = ['mel', 'bcc', 'akiec']
-# call u.augment_data(dir,class_list,n=950) here
 
-tr_df = u.train_df('Data/SkinLesion/Training')
-ts_df = u.train_df('Data/SkinLesion/Testing')
+def main():
+    # dir = 'Data/SkinLesion'
 
-transform = transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor()])
+    # # call u.create_dirs(dir) here
+    # # call u.filter_data(dir) here
+    # # class_list = ['mel', 'bcc', 'akiec']
+    # # call u.augment_data(dir,class_list,n=950) here
 
-train_ds = u.CustomDataset(tr_df, transform)
-test_ds = u.CustomDataset(ts_df, transform)
+    # tr_df = u.train_df('Data/SkinLesion/Training')
+    # ts_df = u.train_df('Data/SkinLesion/Testing')
 
-train_loader = DataLoader(train_ds, batch_size=10, shuffle=True)
-test_loader = DataLoader(test_ds, batch_size=10, shuffle=False)
-class_dict = {0: 'akiec', 1: 'bcc', 2: 'mel'}
+    # transform = transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor()])
 
-# call u.view_with_class(train_loader, class_dict) here
+    # train_ds = u.CustomDataset(tr_df, transform)
+    # test_ds = u.CustomDataset(ts_df, transform)
 
-model = YOLO('yolov8n.yaml')
-results = model.train(data="skincancer.yaml", epochs=30, imgsz=224, batch=10)
+    # train_loader = DataLoader(train_ds, batch_size=10, shuffle=True)
+    # test_loader = DataLoader(test_ds, batch_size=10, shuffle=False)
+    # class_dict = {0: 'akiec', 1: 'bcc', 2: 'mel'}
+
+    # call u.view_with_class(train_loader, class_dict) here
+    save_dir = 'Models/model/skincancer'
+    model = YOLO('yolov8n.yaml')
+    model.to('cuda')
+    results = model.train(
+        data="Models/skincancer.yaml",
+        epochs=30,
+        imgsz=224,
+        batch=150,
+        save_dir=save_dir,
+    )
+
+
+if __name__ == '__main__':
+    main()

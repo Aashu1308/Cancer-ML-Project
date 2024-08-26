@@ -4,3 +4,6 @@ Data/*
 installed.txt
 missing.txt
 Models/__pycache__/
+runs/
+Streamlit/
+.DS_Store
