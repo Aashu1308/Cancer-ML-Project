@@ -9,6 +9,7 @@ from numpy.random import seed
 import numpy as np
 import shutil
 from glob import glob
+from textwrap import wrap
 
 
 def train_df(tr_path):
@@ -359,3 +360,34 @@ def create_yolo_labels(image_dir, label_dir, cid):
             obj_width = 1
             obj_height = 1
             f.write(f"{class_id} {center_x} {center_y} {obj_width} {obj_height}")
+
+
+def classification_graph(results, filename, choice):
+    classess = ['akiec', 'bcc', 'mel']
+    classesc = [
+        'High squamous intra-epithelial lesion',
+        'Low squamous intra-epithelial lesion',
+        'Negative for Intraepithelial malignancy',
+        'Squamous cell carcinoma',
+    ]
+    classesc = ['\n'.join(wrap(c, 20)) for c in classesc]
+    classesb = ['meningioma', 'glioma', 'notumor']
+
+    if choice == 'Brain Tumor Detection':
+        cname = classesb
+    elif choice == 'Cervical Cancer Detection':
+        cname = classesc
+    else:
+        cname = classess
+
+    for result in results:
+        prob = result.probs
+        l = prob.data
+        x = [cname[i] for i in range(len(l))]
+
+    plt.xlabel('Cancer types')
+    plt.ylabel('Confidence')
+    plt.yticks(rotation=30)
+    plt.barh(x, l, align='center', height=0.5)
+    plt.tight_layout()
+    plt.savefig(filename)
