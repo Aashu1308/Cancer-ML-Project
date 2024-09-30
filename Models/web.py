@@ -56,10 +56,10 @@ if upload_file is not None:
         if result.boxes.conf.shape[0] > 0:
             st.subheader("Result Image")
             st.image(result_image_path_d)
-            if model_choice != 'Brain Tumor Detection':
-                st.image(result_image_path_c)
+            # if model_choice != 'Brain Tumor Detection':
+            st.image(result_image_path_c)
             print(result.boxes)
         else:
-            if model_choice != 'Brain Tumor Detection':
-                st.subheader("Classification")
-                st.image(result_image_path_c)
+            # if model_choice != 'Brain Tumor Detection':
+            st.subheader("Classification")
+            st.image(result_image_path_c)
